@@ -9,13 +9,31 @@ MARGEN = 30
 COLOR_FONDO = (0,0,0) #RGB (red, green, blue)
 COLOR_OBJETOS = (200, 200, 200)
 
+class Pelota:
+
+    tam_pelota = 10
+
+    def __init__(self):
+        #definido (construido, instanciado...) el rectángulo
+        self.rectangulo = pygame.Rect(
+            (ANCHO - self.tam_pelota)/2,
+            (ALTO - self.tam_pelota)/2,
+            self.tam_pelota,
+            self.tam_pelota)
+
+    def pintame(self, pantalla):
+        # pintar el rectángulo
+        pygame.draw.rect(pantalla, COLOR_OBJETOS, self.rectangulo)
+
+
+
 
 class Pong:
 
     def __init__(self):
         pygame.init()
         self.pantalla = pygame.display.set_mode((ANCHO, ALTO))
-        pass
+        self.pelota = Pelota()
 
     def jugar(self):
         salir = False
@@ -51,6 +69,9 @@ class Pong:
             # 4. pintar la red
             self.pintar_red()
 
+            # 5. pintar la pelota
+            self.pelota.pintame(self.pantalla)
+
             # mostrar los cambios en la pantalla 
             pygame.display.flip()
 
@@ -72,9 +93,7 @@ class Pong:
                 width = ancho_red)
             
 
-if __name__ == '__main__':
-    juego = Pong()
-    juego.jugar()
+
 
 
 
