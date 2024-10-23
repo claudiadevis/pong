@@ -8,15 +8,21 @@ MARGEN = 30
 
 COLOR_FONDO = (0,0,0) #RGB (red, green, blue)
 COLOR_OBJETOS = (200, 200, 200)
+VEL_JUGADOR = 5
+
+"""
+J1: A, Z
+J2: ARR, ABJ
+"""
 
 
-class Pintable:
+class Pintable(pygame.Rect):
 
     def __init__(self, x, y, ancho, alto):
-        self.rectangulo = pygame.Rect(x, y, ancho, alto)
+        super().__init__(x, y, ancho, alto) 
 
     def pintame(self, pantalla):
-        pygame.draw.rect(pantalla, COLOR_OBJETOS, self.rectangulo)
+        pygame.draw.rect(pantalla, COLOR_OBJETOS, self)
 
 
 class Pelota (Pintable):
@@ -38,6 +44,10 @@ class Jugador(Pintable):
         arriba = (ALTO-ALTO_PALA) / 2   #ALTO/2 - ALTO_PALA/2
         super().__init__(x, arriba, ANCHO_PALA, ALTO_PALA)
 
+    def subir(self):
+        self.y -= VEL_JUGADOR
+
+
     
 class Pong:
 
@@ -54,8 +64,27 @@ class Pong:
         while not salir:
             #bucle principal (main loop)
             for evento in pygame.event.get():
-                if evento.type == pygame.QUIT:
+                if evento.type == pygame.QUIT or (evento.type == pygame.KEYUP and evento.key == pygame.K_ESCAPE):
                     salir = True
+
+                #if evento.type == pygame.KEYDOWN and evento.key == pygame.K_a:
+                #    self.jugador1.rectangulo.y = self.jugador1.rectangulo.y - VEL_JUGADOR = self.jugador1.rectangulo.y -= VEL_JUGADOR
+                #if evento.type == pygame.KEYDOWN and evento.key == pygame.K_z:
+                #    self.jugador1.rectangulo.y = self.jugador1.rectangulo.y + VEL_JUGADOR
+                #if evento.type == pygame.KEYDOWN and evento.key == pygame.K_UP:
+                #    self.jugador2.rectangulo.y = self.jugador1.rectangulo.y - VEL_JUGADOR
+                #if evento.type == pygame.KEYDOWN and evento.key == pygame.K_DOWN:
+                #    self.jugador2.rectangulo.y = self.jugador1.rectangulo.y + VEL_JUGADOR
+
+            estado_teclas = pygame.key.get_pressed()
+            if estado_teclas[pygame.K_a]:
+                self.jugador1.subir()
+            if estado_teclas[pygame.K_z]:
+                self.jugador1.y += VEL_JUGADOR
+            if estado_teclas[pygame.K_UP]:
+                self.jugador2.subir()
+            if estado_teclas[pygame.K_DOWN]:
+                self.jugador2.y += VEL_JUGADOR
 
             # renderizar mis objetos
 
