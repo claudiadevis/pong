@@ -1,4 +1,5 @@
 # pong
+
 Recreación del juego clásico pong con pygame
 
 ## Cómó crear un entorno virtual

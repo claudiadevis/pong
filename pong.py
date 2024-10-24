@@ -1,3 +1,4 @@
+from random import randint
 import pygame
 
 ALTO = 600
@@ -8,7 +9,10 @@ MARGEN = 30
 
 COLOR_FONDO = (0,0,0) #RGB (red, green, blue)
 COLOR_OBJETOS = (200, 200, 200)
-VEL_JUGADOR = 5
+VEL_JUGADOR = 10 #Un jugador se mueve a 10 px cada 1/40 de segundo 
+FPS = 40
+
+VEL_PELOTA = 10
 
 """
 J1: A, Z
@@ -36,6 +40,23 @@ class Pelota (Pintable):
             (ALTO - self.tam_pelota)/2,
             self.tam_pelota,
             self.tam_pelota)
+        self.vel_x = 0
+        while self.vel_x == 0:
+            self.vel_x = randint(-VEL_PELOTA, VEL_PELOTA)
+        self.vel_y = randint(-VEL_PELOTA, VEL_PELOTA)
+
+    def mover(self):
+        self.x += self.vel_x
+        self.y += self.vel_y
+
+        if self.y <= 0:
+            self.vel_y = -self.vel_y
+        if self.y >= (ALTO-self.tam_pelota):
+            self.vel_y = -self.vel_y
+        if self.x <= 0:
+            self.vel_x = -self.vel_x
+        if self.x >= (ANCHO-self.tam_pelota):
+            self.vel_x = -self.vel_x
 
 
 class Jugador(Pintable):
@@ -62,13 +83,21 @@ class Pong:
 
     def __init__(self):
         pygame.init()
+
         self.pantalla = pygame.display.set_mode((ANCHO, ALTO))
+        self.reloj = pygame.time.Clock()    
+
         self.pelota = Pelota()
         self.jugador1 = Jugador(MARGEN)
         self.jugador2 = Jugador (ANCHO - MARGEN - ANCHO_PALA)
 
     def jugar(self):
         salir = False
+
+        #pelotas = []
+
+        #for p in range (0,25):
+            #pelotas.append(Pelota())
 
         while not salir:
             #bucle principal (main loop)
@@ -98,7 +127,8 @@ class Pong:
             # renderizar mis objetos
 
             # 1. borrar la pantalla (pìntar un cuadrado del mismo color de fondo del mismo tamaño de la pantalla)
-            pygame.draw.rect(self.pantalla, COLOR_FONDO, ((0,0), (ANCHO, ALTO)))
+            # pygame.draw.rect(self.pantalla, COLOR_FONDO, ((0,0), (ANCHO, ALTO)))
+            self.pantalla.fill(COLOR_FONDO)
 
             # 2. pintar jugador 1 (izquierda)
             self.jugador1.pintame(self.pantalla)
@@ -109,11 +139,24 @@ class Pong:
             # 4. pintar la red
             self.pintar_red()
 
-            # 5. pintar la pelota
+            # 5. Calculamos posición y pintamos la pelota
+            # x, y
+            # posición inicial es el centro de la pantalla
+            # iniciar el movimiento en una dirección aleatoria.
+
+            self.pelota.mover()
             self.pelota.pintame(self.pantalla)
+
+            #for p in pelotas:
+                #p.x += p.vel_x
+                #p.y += p.vel_y
+                #p.pintame(self.pantalla)
+                #p.mover()
+
 
             # mostrar los cambios en la pantalla 
             pygame.display.flip()
+            self.reloj.tick(FPS)
 
         pygame.quit()
 
