@@ -53,11 +53,7 @@ class Pelota (Pintable):
             self.vel_y = -self.vel_y
         if self.y >= (ALTO-self.tam_pelota):
             self.vel_y = -self.vel_y
-        if self.x <= 0:
-            self.vel_x = -self.vel_x
-        if self.x >= (ANCHO-self.tam_pelota):
-            self.vel_x = -self.vel_x
-
+        
 
 class Jugador(Pintable):
 
@@ -146,6 +142,12 @@ class Pong:
 
             self.pelota.mover()
             self.pelota.pintame(self.pantalla)
+
+            #comprobar si hay colisión entre pelota y jugadores
+            if self.pelota.colliderect(self.jugador1) or self.pelota.colliderect(self.jugador2):
+                print('La pelota rebota')
+                self.pelota.vel_x = -self.pelota.vel_x
+
 
             #for p in pelotas:
                 #p.x += p.vel_x
