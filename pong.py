@@ -12,7 +12,7 @@ COLOR_OBJETOS = (200, 200, 200)
 VEL_JUGADOR = 10 #Un jugador se mueve a 10 px cada 1/40 de segundo 
 FPS = 40
 
-VEL_PELOTA = 10
+VEL_PELOTA = 14
 
 """
 J1: A, Z
@@ -53,7 +53,20 @@ class Pelota (Pintable):
             self.vel_y = -self.vel_y
         if self.y >= (ALTO-self.tam_pelota):
             self.vel_y = -self.vel_y
-        
+
+        if self.x <= 0:
+            self.reiniciar(True)
+        if self.x >= (ANCHO-self.tam_pelota):
+            self.reiniciar(False)
+
+    def reiniciar(self, haciaIzquierda):
+        self.x = (ANCHO - self.tam_pelota)/2
+        self.y = (ALTO - self.tam_pelota)/2
+        self.vel_y = randint(-VEL_PELOTA, VEL_PELOTA)
+        if haciaIzquierda:
+            self.vel_x = randint(-VEL_PELOTA, -1)
+        else:
+            self.vel_x = randint(1, VEL_PELOTA)
 
 class Jugador(Pintable):
 
@@ -73,6 +86,29 @@ class Jugador(Pintable):
         if self.y > posicion_maxima:
             self.y = posicion_maxima
 
+
+class Marcador:
+
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.puntuacion = [0,0]
+
+    def pintame(self):
+        #todo pintar en pantalla el marcador
+        print('Marcador:', self.puntuacion)
+    
+    def incrementar(self, jugador):
+        if jugador in (1,2):
+            self.puntuacion[jugador - 1] += 1
+    
+    def quien_gana(self):
+        if self.puntuacion[0] == 9:
+            return 1
+        if self.puntuacion[1] == 9:
+            return 2
+        return 0
 
     
 class Pong:
@@ -145,7 +181,6 @@ class Pong:
 
             #comprobar si hay colisión entre pelota y jugadores
             if self.pelota.colliderect(self.jugador1) or self.pelota.colliderect(self.jugador2):
-                print('La pelota rebota')
                 self.pelota.vel_x = -self.pelota.vel_x
 
 
