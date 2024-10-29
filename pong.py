@@ -54,10 +54,14 @@ class Pelota (Pintable):
         if self.y >= (ALTO-self.tam_pelota):
             self.vel_y = -self.vel_y
 
+        
         if self.x <= 0:
             self.reiniciar(True)
+            return 2
         if self.x >= (ANCHO-self.tam_pelota):
             self.reiniciar(False)
+            return 1
+        return 0
 
     def reiniciar(self, haciaIzquierda):
         self.x = (ANCHO - self.tam_pelota)/2
@@ -122,6 +126,7 @@ class Pong:
         self.pelota = Pelota()
         self.jugador1 = Jugador(MARGEN)
         self.jugador2 = Jugador (ANCHO - MARGEN - ANCHO_PALA)
+        self.marcador = Marcador()
 
     def jugar(self):
         salir = False
@@ -176,7 +181,7 @@ class Pong:
             # posición inicial es el centro de la pantalla
             # iniciar el movimiento en una dirección aleatoria.
 
-            self.pelota.mover()
+            punto_para = self.pelota.mover()
             self.pelota.pintame(self.pantalla)
 
             #comprobar si hay colisión entre pelota y jugadores
@@ -191,6 +196,10 @@ class Pong:
                 #p.mover()
 
 
+            if punto_para in (1,2):
+                self.marcador.incrementar(punto_para)
+            
+            self.marcador.pintame()
             # mostrar los cambios en la pantalla 
             pygame.display.flip()
             self.reloj.tick(FPS)
