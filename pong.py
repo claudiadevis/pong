@@ -198,6 +198,10 @@ class Pong:
 
             if punto_para in (1,2):
                 self.marcador.incrementar(punto_para)
+                ganador = self.marcador.quien_gana()
+                if 1<= ganador <=2:
+                    print(f'El jugador {ganador} ha ganado la partida.')
+                    self.pelota.vel_x = self.pelota.vel_y = 0
             
             self.marcador.pintame()
             # mostrar los cambios en la pantalla 
