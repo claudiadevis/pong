@@ -14,6 +14,8 @@ FPS = 40
 
 VEL_PELOTA = 14
 
+TAM_LETRA_MARCADOR = 150
+
 """
 J1: A, Z
 J2: ARR, ABJ
@@ -93,15 +95,42 @@ class Jugador(Pintable):
 
 class Marcador:
 
+    nombre_tipo_letra = pygame.font.get_default_font()
+
     def __init__(self):
+        self.preparar_tipografia()
         self.reset()
+
+    def preparar_tipografia(self):
+        tipos = pygame.font.get_fonts()
+        letra = 'arial'
+        if letra not in tipos:
+            letra = pygame.font.get_default_font()
+        self.tipo_letra = pygame.font.SysFont(letra, TAM_LETRA_MARCADOR)
+        
 
     def reset(self):
         self.puntuacion = [0,0]
 
-    def pintame(self):
+    def pintame(self, pantalla):
         #todo pintar en pantalla el marcador
-        print('Marcador:', self.puntuacion)
+        #print('Marcador:', self.puntuacion)
+        #puntuacion = str(self.puntuacion[0])
+        #img_texto = self.tipo_letra.render(puntuacion, False, COLOR_OBJETOS)
+        #ancho_img = img_texto.get_width()
+        #x = (ANCHO/2 - ancho_img)/2
+        #y = MARGEN
+        #pantalla.blit(img_texto,(x,y))
+
+        n = 1
+        for punto in self.puntuacion:
+            puntuacion = str(punto)
+            img_texto = self.tipo_letra.render(puntuacion, True, COLOR_OBJETOS)
+            ancho_img = img_texto.get_width()
+            x = cuarto/4 * ANCHO - ancho_img/2
+            y = MARGEN
+            pantalla.blit(img_texto,(x,y))
+            n += 2
     
     def incrementar(self, jugador):
         if jugador in (1,2):
@@ -130,11 +159,6 @@ class Pong:
 
     def jugar(self):
         salir = False
-
-        #pelotas = []
-
-        #for p in range (0,25):
-            #pelotas.append(Pelota())
 
         while not salir:
             #bucle principal (main loop)
@@ -188,14 +212,6 @@ class Pong:
             if self.pelota.colliderect(self.jugador1) or self.pelota.colliderect(self.jugador2):
                 self.pelota.vel_x = -self.pelota.vel_x
 
-
-            #for p in pelotas:
-                #p.x += p.vel_x
-                #p.y += p.vel_y
-                #p.pintame(self.pantalla)
-                #p.mover()
-
-
             if punto_para in (1,2):
                 self.marcador.incrementar(punto_para)
                 ganador = self.marcador.quien_gana()
@@ -203,7 +219,7 @@ class Pong:
                     print(f'El jugador {ganador} ha ganado la partida.')
                     self.pelota.vel_x = self.pelota.vel_y = 0
             
-            self.marcador.pintame()
+            self.marcador.pintame(self.pantalla)
             # mostrar los cambios en la pantalla 
             pygame.display.flip()
             self.reloj.tick(FPS)
