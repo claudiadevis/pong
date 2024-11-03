@@ -17,7 +17,7 @@ VEL_PELOTA = 14
 
 TAM_LETRA_MARCADOR = 150
 
-TAM_LETRA_MENSAJE = 20
+TAM_LETRA_MENSAJE = 30
 DISTANCIA_VERT_DESDE_CENTRO = 15
 
 """
@@ -147,13 +147,13 @@ class Mensaje:
         self.pantalla = pantalla
 
         mensaje_ganador = f'El jugador {quien_gana} ha ganado la partida'
-        img_texto = self.tipo_letra.render(mensaje_ganador, True, (255,255,255))
+        img_texto = self.tipo_letra.render(mensaje_ganador, True, (200,200,0))
         pos_x = (ANCHO - img_texto.get_width())/2
         pos_y = ALTO/2 - DISTANCIA_VERT_DESDE_CENTRO - img_texto.get_height()
         self.pantalla.blit(img_texto, (pos_x, pos_y))
 
         mensaje_nueva_partida = '¿Empezar una nueva partida? (S/N)'
-        img_texto = self.tipo_letra.render(mensaje_nueva_partida, True, (255,255,255))
+        img_texto = self.tipo_letra.render(mensaje_nueva_partida, True, (200,200,0))
         pos_y = ALTO/2 + DISTANCIA_VERT_DESDE_CENTRO
         self.pantalla.blit(img_texto, (pos_x, pos_y))
 
@@ -261,11 +261,3 @@ class Pong:
                 (pos_x, y), 
                 (pos_x, y + tramo_pintado), 
                 width = ancho_red)
-            
-
-
-
-
-
-
-
