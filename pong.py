@@ -1,3 +1,4 @@
+import random
 from random import randint
 import pygame
 
@@ -181,12 +182,16 @@ class Pong:
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT or (evento.type == pygame.KEYUP and evento.key == pygame.K_ESCAPE):
                     salir = True
-                if ganador != 0 and evento.type == pygame.KEYUP and evento.key == pygame.K_n:
-                    salir = True
+                if ganador != 0:
+                    if evento.type == pygame.KEYUP and evento.key == pygame.K_n:
+                        print('Se finaliza el juego')
+                        salir = True
+                    if evento.type == pygame.KEYDOWN and evento.key == pygame.K_s:
+                        self.marcador.reset()
+                        resultado = random.choice([True, False])
+                        self.pelota.reiniciar(resultado)
+                        
 
-            # ganador = self.marcador.quien_gana()
-
-            # if ganador == 0:
             estado_teclas = pygame.key.get_pressed()
             if estado_teclas[pygame.K_a]:
                 self.jugador1.subir()
@@ -234,10 +239,6 @@ class Pong:
 
                 self.mensaje.pintame(self.pantalla, ganador)
                 
-                for evento in pygame.event.get():
-                    if evento.type == pygame.KEYDOWN and evento.key == pygame.K_s:
-                        self.marcador.reset()
-                        ganador = 0
                 
             self.marcador.pintame(self.pantalla)
             # mostrar los cambios en la pantalla 
