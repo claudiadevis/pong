@@ -175,11 +175,13 @@ class Pong:
 
     def jugar(self):
         salir = False
-
+        ganador = 0
         while not salir:
             #bucle principal (main loop)
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT or (evento.type == pygame.KEYUP and evento.key == pygame.K_ESCAPE):
+                    salir = True
+                if ganador != 0 and evento.type == pygame.KEYUP and evento.key == pygame.K_n:
                     salir = True
 
             # ganador = self.marcador.quien_gana()
@@ -233,8 +235,6 @@ class Pong:
                 self.mensaje.pintame(self.pantalla, ganador)
                 
                 for evento in pygame.event.get():
-                    if evento.type == pygame.KEYDOWN and evento.key == pygame.K_n:
-                        salir = True
                     if evento.type == pygame.KEYDOWN and evento.key == pygame.K_s:
                         self.marcador.reset()
                         ganador = 0
